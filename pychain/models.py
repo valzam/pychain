@@ -1,4 +1,5 @@
 from Crypto.Hash import SHA3_256
+from Crypto.Signature import pkcs1_15
 
 class Block:
     def __init__(self, prev_hash, transactions, difficulty):
@@ -44,28 +45,30 @@ class Transaction:
         self.sender = sender
         self.signature = None
         
-    def create_hash(self) -> str:
-        """Create a hash of the transaction value and receiver
+    def create_hash(self) -> SHA3_256:
+        """Create a hash of the transaction value, receiver and sender
         
         Returns:
-            str -- hexdigest of SHA3_256 hash
+            SHA3_256 -- SHA3_256 object
         """
+        h_obj = SHA3_256.new()
+        h_obj.update(str.encode(f"{self.value}{self.receiver}{self.sender}"))
 
-        return ""
+        return h_obj
     
     def sign(self, private_key):
         """Signs the transaction with the sender's private key
         
         Arguments:
-            private_key {string} -- 32 bit private key as hexdigest
+            private_key {RSA Key} -- RSA private key
         """
-
-        self.signature = "signed"
+        transaction_hash_obj = self.create_hash()
+        self.signature = pkcs1_15.new(private_key).sign(transaction_hash_obj)
 
     def __repr__(self) -> str:
         if not self.signature:
             raise UnsignedTransactionError()
-        return f"{self.value} - {self.receiver} - {self.sender} - {self.signature}"
+        return f"{self.value}-{self.receiver}-{self.sender}-{self.signature}"
 
 
 class UnsignedTransactionError(Exception):
