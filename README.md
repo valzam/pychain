@@ -25,3 +25,7 @@ The first stage more or less simulates a blockchain without yet implementing all
 
 ### Project structure
 The node is implemented as a Flask API and meant to run only locally. The blockchain is kept in memory.
+
+## Stage 2
+* Block model
+    * Implement merkle tree for the transactions
