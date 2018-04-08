@@ -66,5 +66,13 @@ class TestBlock(unittest.TestCase):
         self.block.nonce = 8
         self.assertTrue(self.block.check_nonce())
 
+    def test_mine(self):
+        self.block.max_nonce = 10
+        self.block.mine()
+
+        self.assertTrue(self.block.nonce_found)
+        self.assertEqual(self.block.nonce, 8)
+        self.assertEqual(self.block.block_hash, "049655763dbfda29978f099d3856249670b41e2beb27f00fe249a02498aa65a1")
+
 
 
