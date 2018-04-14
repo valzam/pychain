@@ -1,0 +1,53 @@
+{
+	"variables": [],
+	"info": {
+		"name": "pychain",
+		"_postman_id": "3c7bce64-befa-5379-881c-92034e2bca27",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get mempool",
+			"request": {
+				"url": "localhost:5000/transactions",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add transactions",
+			"request": {
+				"url": "localhost:5000/transactions",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"transaction\": {\n\t\"value\": 10,\n\t\"sender\": \"30820122300d06092a864886f70d01010105000382010f003082010a0282010100aa3a478b769880ab3753b1c7ee5ab3b6f2d82187d9216af79db107b27f6d9b7cf6500c012b7d5a84163b18f4bbc06cdf55e795f4a2af91822e1cccdb9e5bac46ba65da8a0891915ee3847bf990bac709a91bf6e39540ca4ae0d859439ab4eb8cd8ca8d6f6ba786ab42f4bffd0f87de462612ae3bb8b05e470a82b2ca3299e0a40add68e7c20cf42ce34d0fe104008503f19b5bec5a09266152e41c464163d56ef3df2c3e4fc8ac36f254c551fc6bd2e6ffe8fb0f472d9fc5329c8f152c22df002a9e1ddfdf91e0fc93c05918dff506f6e5b1ddc883fda870cc0ac8b02dc2da90575de35d4e1b37a5cfd27d57b0c7e0e4174184221556e056349b7d34f616eb0d0203010001\",\n\t\"receiver\": \"30820122300d06092a864886f70d01010105000382010f003082010a0282010100aa3a478b769880ab3753b1c7ee5ab3b6f2d82187d9216af79db107b27f6d9b7cf6500c012b7d5a84163b18f4bbc06cdf55e795f4a2af91822e1cccdb9e5bac46ba65da8a0891915ee3847bf990bac709a91bf6e39540ca4ae0d859439ab4eb8cd8ca8d6f6ba786ab42f4bffd0f87de462612ae3bb8b05e470a82b2ca3299e0a40add68e7c20cf42ce34d0fe104008503f19b5bec5a09266152e41c464163d56ef3df2c3e4fc8ac36f254c551fc6bd2e6ffe8fb0f472d9fc5329c8f152c22df002a9e1ddfdf91e0fc93c05918dff506f6e5b1ddc883fda870cc0ac8b02dc2da90575de35d4e1b37a5cfd27d57b0c7e0e4174184221556e056349b7d34f616eb0d0203010001\",\n\t\"signature\": \"6fe11350da03ae51a0d70665a48a1b8714383e85982eda981629e8042bbab19f9bcf0a59684ff6954775d15050998aea3294ce09db33aee1d0af61d87722e99230274fd5a74b9b3fe2f82076804b402dc376eb0a7b6badaa78dfd67b84e15a9022aa2b192227271858ea726fae6d3c5ad1050f61c683f90213cffc9e01fc1b744b711d02f8824abbc97ddb2bb582b0809e5b0a358ad25280a4aaf10335961b1b9122ed046153474af378bc8c81c68f8911da38f63e5d04dac1cc010a6267523ac4b07dd5a2da6ed57b92d318027e71c32145141975f0e79ca1b349f499b078df5ae32fc753d3bf13e840957a7a9d5eb1996f38eea050c8d1fec4b65159ddec38'\"\n}\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get current blockchain",
+			"request": {
+				"url": "localhost:5000/blockchain",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
