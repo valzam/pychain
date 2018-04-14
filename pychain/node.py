@@ -2,6 +2,7 @@ from pychain import models
 import logging
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 class Node:
@@ -13,7 +14,7 @@ class Node:
     
     def accept_transaction(self, transaction: str):
         self.mem_pool.append(transaction)
-
+        logger.info("Accepted a new transaction")
         if len(self.mem_pool) >= self.max_mem_pool:
             self.mine_block()
     
@@ -25,7 +26,7 @@ class Node:
         Returns:
             bool -- Indicator that the mining was successful
         """
-        logger.debug("Mining a new block")
+        logger.info("Mining a new block")
         if len(self.blockchain) == 0:
             prev_hash = "genesis"
         else:

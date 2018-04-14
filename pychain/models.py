@@ -5,6 +5,7 @@ import random
 import binascii
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 class Block:
@@ -34,7 +35,7 @@ class Block:
             self.nonce = random.randint(0, self.max_nonce)
         
         self.nonce_found = True
-        logger.debug(f"found nonce {self.nonce} for block with hash {self.block_hash}")
+        logger.info(f"Found nonce {self.nonce} for block with hash {self.block_hash}")
     
     def create_hash(self) -> SHA3_256:
         """Creates a hash of the current block using SHA3_256
