@@ -1,5 +1,5 @@
 # pychain
-Educational Blockchain implementation in Python. The development is separated into stages from a simple to a complex implementation. I made a point of using seminal papers to implement the blockchain from first principles. This implementation is mostly modeled after bitcoin for sake of simplicity. 
+Educational Blockchain implementation in Python. The development is separated into stages from a simple to a complex implementation. I made a point of using seminal papers to implement the blockchain from first principles. This implementation is mostly modeled after the Ethereum yellowpaper.
 
 ## Stage 1
 The first stage more or less simulates a blockchain without yet implementing all the cryptographic proofs and security. There is no network yet, only a single node accepting transactions, calculating PoW and signing a block. 
