@@ -2,11 +2,13 @@ from Crypto.Hash import SHA3_256
 from Crypto.Signature import pkcs1_15
 import logging
 import random
+import binascii
 
 logger = logging.getLogger(__name__)
 
+
 class Block:
-    def __init__(self,*, prev_hash, transactions, difficulty):
+    def __init__(self, *, prev_hash, transactions, difficulty):
         """
         Arguments:
             prev_hash {hash} -- [Hexdigest of previous block
@@ -32,7 +34,7 @@ class Block:
             self.nonce = random.randint(0, self.max_nonce)
         
         self.nonce_found = True
-        logger.info(f"found nonce {self.nonce} for block with hash {self.block_hash}")
+        logger.debug(f"found nonce {self.nonce} for block with hash {self.block_hash}")
     
     def create_hash(self) -> SHA3_256:
         """Creates a hash of the current block using SHA3_256
@@ -58,13 +60,17 @@ class Block:
         _ = self.create_hash()
         return self.block_hash[:self.difficulty] == "0" * self.difficulty
 
+    def __repr__(self):
+        return f"{self.difficulty}-{self.nonce}-{self.block_hash}"
+
         
 class Transaction:
-    def __init__(self,*, value, receiver, sender):
+    def __init__(self, *, value, receiver, sender, signature=None):
         self.value = value
         self.receiver = receiver
         self.sender = sender
-        self.signature = None
+        self.signature = signature
+        self.transactions_hash = ""
         
     def create_hash(self) -> SHA3_256:
         """Create a hash of the transaction value, receiver and sender
@@ -74,6 +80,7 @@ class Transaction:
         """
         h_obj = SHA3_256.new()
         h_obj.update(str.encode(f"{self.value}{self.receiver}{self.sender}"))
+        self.transactions_hash = h_obj.hexdigest()
 
         return h_obj
     
@@ -84,7 +91,7 @@ class Transaction:
             private_key {RSA Key} -- RSA private key
         """
         transaction_hash_obj = self.create_hash()
-        self.signature = pkcs1_15.new(private_key).sign(transaction_hash_obj)
+        self.signature = binascii.hexlify(pkcs1_15.new(private_key).sign(transaction_hash_obj))
 
     def __repr__(self) -> str:
         if not self.signature:

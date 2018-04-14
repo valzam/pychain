@@ -2,12 +2,15 @@ import unittest
 from pychain import models
 from Crypto.PublicKey import RSA
 from Crypto.Hash import SHA3_256
+import binascii
 
 
 class TestTransaction(unittest.TestCase):
     def setUp(self):
-        self.t = models.Transaction(value=10, receiver="r", sender="s")
-        self.key =  RSA.import_key(open('tests/test_rsa').read())
+        self.key = RSA.import_key(open('tests/test_rsa').read())
+        self.key_pub = RSA.import_key(open('tests/test_rsa.pub').read())
+        self.key_pub = binascii.hexlify(self.key_pub.exportKey(format="DER"))
+        self.t = models.Transaction(value=10, receiver=self.key_pub, sender=self.key_pub)
 
     def test_unsigned_exception(self):
         with self.assertRaises(models.UnsignedTransactionError):
@@ -25,23 +28,21 @@ class TestTransaction(unittest.TestCase):
         h_obj = SHA3_256.new()
         h_obj.update(str.encode(f"{self.t.value}{self.t.receiver}{self.t.sender}"))
         signature = models.pkcs1_15.new(self.key).sign(h_obj)
-
+        signature = binascii.hexlify(signature)
         self.assertEqual(signature, self.t.signature)
-
 
     def test_signed_representation(self):
         self.t.sign(self.key)
         signature = self.t.signature
         str_rep = str(self.t)
-        expected = f"10-r-s-{signature}"
-
+        expected = f"10-{str(self.key_pub)}-{str(self.key_pub)}-{signature}"
         self.assertEqual(str_rep, expected)
 
 
 class TestBlock(unittest.TestCase):
     def setUp(self):
         t = models.Transaction(value=10, receiver="r", sender="s")
-        self.keyr =  RSA.import_key(open('tests/test_rsa').read())
+        self.keyr = RSA.import_key(open('tests/test_rsa').read())
         t.sign(self.keyr)
         self.transactions = [str(t)]
         self.prev_hash = SHA3_256.new().update(str.encode("fake previous block")).hexdigest()
@@ -63,16 +64,13 @@ class TestBlock(unittest.TestCase):
         self.assertFalse(self.block.check_nonce())
 
         # Nonce 8 satisfies the conditions 049655763dbfda29978f099d3856249670b41e2beb27f00fe249a02498aa65a1
-        self.block.nonce = 8
+        self.block.mine()
         self.assertTrue(self.block.check_nonce())
 
     def test_mine(self):
-        self.block.max_nonce = 10
         self.block.mine()
 
         self.assertTrue(self.block.nonce_found)
-        self.assertEqual(self.block.nonce, 8)
-        self.assertEqual(self.block.block_hash, "049655763dbfda29978f099d3856249670b41e2beb27f00fe249a02498aa65a1")
 
 
 
